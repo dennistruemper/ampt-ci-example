@@ -1,0 +1,47 @@
+name: CI for feature branches on pullrequest
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  pullrequest-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/cache@v3.3.1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Use Node.js
+        uses: actions/setup-node@v3.8.1
+        with:
+          node-version-file: .nvmrc
+      - name: npm install
+        if: steps.cache-node_modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: deploy backend
+        env:
+          AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
+        id: deploy-backend
+        run: |
+          url=$(./scripts/deployAndGetUrl.sh ci)
+          echo "BACKEND_URL=$url" >> "$GITHUB_OUTPUT"
+
+      - name: test backend integration with sandbox stage
+        env:
+          AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
+        id: backend-integration-test
+        run: |
+          npm run ampt:test
+
+      - name: test backend integration wit ci stage
+        if: always()
+        env:
+          AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
+        id: backend-integration-test
+        run: |
+          npm run ampt:test --stage ci
