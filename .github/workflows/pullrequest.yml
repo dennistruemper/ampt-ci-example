@@ -34,7 +34,6 @@ jobs:
       - name: test backend integration with sandbox stage
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
-        id: backend-integration-test
         run: |
           npm run ampt:test
 
@@ -42,6 +41,5 @@ jobs:
         if: always()
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
-        id: backend-integration-test
         run: |
           npm run ampt:test --stage ci
