@@ -35,11 +35,11 @@ jobs:
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
         run: |
-          npx run ampt test
+          npx ampt run ampt test
 
       - name: test backend integration wit ci stage
         if: always()
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
         run: |
-          npx run ampt test --stage ci
+          npx ampt run ampt test --stage ci
