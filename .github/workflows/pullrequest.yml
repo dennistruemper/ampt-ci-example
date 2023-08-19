@@ -43,3 +43,10 @@ jobs:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
         run: |
           npx ampt run test --stage ci
+
+      - name: upload ampt log
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: ampt-log
+          path: .ampt/log # or path/to/artifact
