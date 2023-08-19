@@ -46,7 +46,7 @@ jobs:
 
       - name: upload ampt log
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.2
         with:
           name: ampt-log
-          path: .ampt/log # or path/to/artifact
+          path: .ampt/log
