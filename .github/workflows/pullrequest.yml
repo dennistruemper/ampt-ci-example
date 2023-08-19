@@ -48,5 +48,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ampt-log
-          path: .ampt/log
+          name: ampt-logs
+          path: .ampt/logs
