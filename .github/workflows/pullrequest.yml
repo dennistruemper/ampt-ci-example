@@ -34,14 +34,19 @@ jobs:
       - name: test backend integration with sandbox stage
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
-        id: backend-integration-test
         run: |
-          npm run ampt:test
+          npx ampt run test
 
       - name: test backend integration wit ci stage
         if: always()
         env:
           AMPT_API_KEY: ${{ secrets.AMPT_API_KEY }}
-        id: backend-integration-test
         run: |
-          npm run ampt:test --stage ci
+          npx ampt run test --stage ci
+
+      - name: upload ampt log
+        if: always()
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ampt-logs
+          path: .ampt/logs
